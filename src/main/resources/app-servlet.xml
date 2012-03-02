@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+  <context:annotation-config />
+  <context:component-scan base-package="mk.jug.jobs.web" />
+
+  <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+    <property name="order" value="1" />
+    <property name="ignoreAcceptHeader" value="true" />
+    <property name="mediaTypes">
+      <map>
+        <entry key="xml" value="application/xml" />
+        <entry key="json" value="application/json" />
+      </map>
+    </property>
+    <property name="defaultViews">
+      <list>
+        <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+          <property name="marshaller" ref="jaxbMarshaller" />
+  <!-- FIXME no  convertors-->
+        </bean>
+        <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+          <property name="objectMapper" ref="jaxbJacksonObjectMapper" />
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+    <property name="order" value="2" />
+  </bean>
+
+
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/WEB-INF/jsp/" />
+    <property name="suffix" value=".jsp" />
+    <property name="order" value="3" />
+  </bean>
+
+  <mvc:annotation-driven />
+
+
+</beans>
